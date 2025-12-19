@@ -1,0 +1,172 @@
+name: StaffTools
+version: "${project.version}"
+main: com.inpuzah.stafftools.StaffToolsPlugin
+api-version: "1.21"
+load: POSTWORLD
+depend: [LuckPerms]
+softdepend: [Essentials, DiscordRelay, Plan]
+author: BGSU
+description: Advanced staff management and punishment system
+
+commands:
+  stafftools:
+    description: Main plugin command
+    aliases: [st]
+    permission: stafftools.admin
+
+  punish:
+    description: Open punishment GUI for a player
+    usage: /<command> <player>
+    permission: stafftools.punish.use
+
+  warn:
+    description: Warn a player
+    usage: /<command> <player> <reason>
+    permission: stafftools.punish.warn
+
+  mute:
+    description: Mute a player
+    usage: /<command> <player> <duration> <reason>
+    permission: stafftools.punish.mute
+
+  unmute:
+    description: Unmute a player
+    usage: /<command> <player>
+    permission: stafftools.punish.unmute
+
+  kick:
+    description: Kick a player
+    usage: /<command> <player> <reason>
+    permission: stafftools.punish.kick
+
+  ban:
+    description: Ban a player
+    usage: /<command> <player> <duration> <reason>
+    permission: stafftools.punish.ban
+
+  unban:
+    description: Unban a player
+    usage: /<command> <player>
+    permission: stafftools.punish.unban
+
+  punishhistory:
+    description: View a player's punishment history
+    usage: /<command> <player>
+    aliases: [phistory, history]
+    permission: stafftools.punish.history
+
+  punishments:
+    description: Open the punishments management GUI
+    aliases: [pmanage]
+    permission: stafftools.punish.manage
+
+  staffmode:
+    description: Toggle staff mode
+    aliases: [staff, mod, modmode]
+    permission: stafftools.staff.mode
+
+  vanish:
+    description: Toggle vanish mode
+    aliases: [v]
+    permission: stafftools.vanish.use
+
+  freeze:
+    description: Freeze a player
+    usage: /<command> <player>
+    permission: stafftools.freeze
+
+  invsee:
+    description: View a player's inventory
+    usage: /<command> <player>
+    permission: stafftools.invsee
+
+  notes:
+    description: Manage staff notes for a player
+    usage: /<command> <player> [add/list/remove] [note]
+    permission: stafftools.notes
+
+  report:
+    description: Report a player
+    usage: /<command> <player> <reason>
+    permission: stafftools.report.use
+
+  reports:
+    description: View and manage reports
+    aliases: [reportmanage]
+    permission: stafftools.report.manage
+
+  appeal:
+    description: Appeal your punishment
+    usage: /<command> <reason>
+    permission: stafftools.appeal.use
+
+  appeals:
+    description: View and manage appeals
+    aliases: [appealmanage]
+    permission: stafftools.appeal.manage
+
+  buildban:
+    description: BuildBan a player (remove build permissions)
+    usage: /<command> <player> <duration> <reason>
+    permission: stafftools.punish.buildban
+
+  unbuildban:
+    description: Remove a buildban
+    usage: /<command> <player>
+    permission: stafftools.punish.unbuildban
+
+  template:
+    description: Manage punishment templates
+    usage: /<command> <create/delete/list/use> [name]
+    permission: stafftools.template
+
+  staffdashboard:
+    description: View staff performance dashboard
+    aliases: [sdash, dashboard]
+    permission: stafftools.dashboard
+
+  announce:
+    description: Broadcast a message with BGSU branding
+    aliases: [warn, bc]
+    usage: /<command> <message> OR /<command> 1 <message> (anonymous)
+    permission: stafftools.announce
+
+permissions:
+  stafftools.*:
+    description: All StaffTools permissions
+    children:
+      stafftools.admin: true
+      stafftools.punish.*: true
+      stafftools.staff.*: true
+      stafftools.vanish.*: true
+
+  stafftools.admin:
+    description: Admin commands
+    default: op
+
+  stafftools.punish.*:
+    description: All punishment permissions
+    children:
+      stafftools.punish.use: true
+      stafftools.punish.warn: true
+      stafftools.punish.mute: true
+      stafftools.punish.unmute: true
+      stafftools.punish.kick: true
+      stafftools.punish.ban: true
+      stafftools.punish.unban: true
+      stafftools.punish.history: true
+      stafftools.punish.manage: true
+      stafftools.punish.remove: true
+
+  stafftools.staff.*:
+    description: All staff mode permissions
+    children:
+      stafftools.staff.mode: true
+      stafftools.staff.notify: true
+
+  stafftools.vanish.*:
+    description: All vanish permissions
+    children:
+      stafftools.vanish.use: true
+      stafftools.vanish.see: true
+      stafftools.vanish.priority: true

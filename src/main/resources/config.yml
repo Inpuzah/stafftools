@@ -1,0 +1,507 @@
+# StaffTools Configuration File
+
+# Debug Logging System
+debug:
+  # Enable debug logging
+  enabled: false
+
+  # Size of the debug ring buffer (recent logs kept in memory)
+  buffer-size: 500
+
+  # Log debug messages to console
+  log-to-console: true
+
+  # Discord Integration for Debug Logs
+  discord:
+    # Enable sending debug logs to Discord
+    enabled: false
+
+    # Discord channel ID for debug logs (from DiscordRelay config)
+    # Create a dedicated #debug-logs channel and paste its ID here
+    channel-id: "000000000000000000"
+
+    # Minimum log level to send to Discord (TRACE, DEBUG, INFO, WARN, ERROR)
+    min-level: "WARN"
+
+    # Rate limit for Discord messages (milliseconds)
+    # Prevents spam - messages of same category+level throttled
+    rate-limit-ms: 3000
+
+    # Categories to send to Discord
+    # Use "ALL" to send everything, or specify categories:
+    # - Database, Command, Punishment, Vanish, Freeze, GUI, etc.
+    categories:
+      - "ALL"
+
+    # Example of selective categories:
+    # categories:
+    #   - "Database"
+    #   - "Punishment"
+    #   - "Error"
+
+# Database Configuration
+database:
+  # Type: sqlite or mysql
+  type: sqlite
+
+  # MySQL Settings (only used if type is mysql)
+  mysql:
+    host: localhost
+    port: 3306
+    database: stafftools
+    username: root
+    password: ""
+    pool-size: 10
+
+  # SQLite Settings (only used if type is sqlite)
+  sqlite:
+    file: stafftools.db
+    pool-size: 3
+
+# Command Priority Settings
+commands:
+  # Override Essentials commands (requires restart)
+  override-essentials: true
+
+  # Commands to override (when override-essentials is true)
+  override-list:
+    - vanish
+    - v
+    - invsee
+
+  # Allow commands while frozen
+  frozen-allowed-commands:
+    - helpop
+    - report
+
+# Punishment System
+punishment:
+  # Sync bans with vanilla ban system and Essentials
+  sync-with-vanilla: true
+  sync-with-essentials: true
+
+  # Preset reasons for quick selection
+  preset-reasons:
+    - "Hacking/Cheating"
+    - "Inappropriate Language"
+    - "Spam/Advertisement"
+    - "Griefing"
+    - "Harassment"
+    - "Exploiting Bugs"
+    - "Scamming"
+    - "Inappropriate Skin/Name"
+    - "Alt Account"
+
+  # Duration presets (in minutes, 0 = permanent)
+  duration-presets:
+    "1 Hour": 60
+    "6 Hours": 360
+    "1 Day": 1440
+    "3 Days": 4320
+    "7 Days": 10080
+    "14 Days": 20160
+    "30 Days": 43200
+    "Permanent": 0
+
+  # Punishment templates (quick punishment combos)
+  templates:
+    hacking:
+      type: BAN
+      reason: "Hacking/Cheating"
+      duration: 0 # Permanent
+
+    spam:
+      type: MUTE
+      reason: "Spam/Advertisement"
+      duration: 360 # 6 hours
+
+    language:
+      type: WARN
+      reason: "Inappropriate Language"
+      duration: 0
+
+    grief:
+      type: BUILDBAN
+      reason: "Griefing"
+      duration: 10080 # 7 days
+
+  # Appeal system
+  appeals:
+    enabled: true
+    cooldown-hours: 24 # Hours between appeal attempts
+    allow-appeal-types: # Which punishment types can be appealed
+      - BAN
+      - MUTE
+      - BUILDBAN
+    auto-notify-staff: true # Notify staff when new appeal submitted
+
+  # Auto-escalation (suggest higher punishment for repeat offenders)
+  auto-escalate: true
+  escalation-threshold: 3 # Number of previous punishments before suggesting escalation
+
+# BuildBan System (removes build permissions but allows exploration/chat)
+buildban:
+  enabled: true
+
+  # LuckPerms groups to demote to when buildbanned
+  # This group should have permissions to move/chat but not build
+  demoted-group: "buildban"
+
+  # Store original group to restore after unban
+  restore-original-group: true
+
+  # Permissions to remove (if not using group system)
+  remove-permissions:
+    - "worldedit.*"
+    - "minecraft.command.give"
+    - "essentials.build"
+
+  # Message shown to buildbanned players when they try to build
+  build-attempt-message:
+    - "&c&lYou are BuildBanned!"
+    - "&7Reason: &f{reason}"
+    - "&7Expires: &f{duration}"
+    - ""
+    - "&7You can still explore and chat."
+
+# Reporting System
+reports:
+  enabled: true
+
+  # Cooldown between reports (seconds)
+  report-cooldown: 60
+
+  # Minimum reason length
+  min-reason-length: 10
+
+  # Auto-assign reports to online staff
+  auto-assign: false
+
+  # Notify staff of new reports
+  notify-staff: true
+
+  # Close reports automatically after X days
+  auto-close-days: 7
+
+  # Preset report reasons
+  preset-reasons:
+    - "Hacking/Cheating"
+    - "Inappropriate Language"
+    - "Harassment"
+    - "Griefing"
+    - "Spam"
+    - "Scamming"
+    - "Other"
+
+# Staff Mode Settings
+staff-mode:
+  enabled: true
+
+  # Auto-enable features when entering staff mode
+  auto-vanish: true
+  auto-fly: false
+
+  # Staff mode inventory items
+  items:
+    enabled: true
+
+    compass:
+      enabled: true
+      slot: 0
+      name: "&b&lTeleporter"
+      lore:
+        - "&7Right-click to open"
+        - "&7teleport menu"
+
+    freeze-stick:
+      enabled: true
+      slot: 1
+      name: "&c&lFreeze Player"
+      lore:
+        - "&7Right-click a player"
+        - "&7to freeze them"
+
+    inspector:
+      enabled: true
+      slot: 2
+      name: "&e&lPlayer Inspector"
+      lore:
+        - "&7Right-click a player"
+        - "&7to view their info"
+
+    random-tp:
+      enabled: true
+      slot: 4
+      name: "&d&lRandom Teleport"
+      lore:
+        - "&7Right-click to teleport"
+        - "&7to a random online player"
+
+    punish-book:
+      enabled: true
+      slot: 7
+      name: "&4&lPunishment Book"
+      lore:
+        - "&7Right-click to open"
+        - "&7punishment GUI"
+
+    vanish-toggle:
+      enabled: true
+      slot: 8
+      name: "&f&lToggle Vanish"
+      lore:
+        - "&7Right-click to toggle"
+        - "&7your vanish status"
+
+  # Protections while in staff mode
+  protections:
+    no-damage: true
+    no-hunger: true
+    no-item-pickup: true
+    no-item-drop: true
+    no-block-break: false
+    no-block-place: false
+
+# Vanish Settings
+vanish:
+  # Show fake join/quit messages
+  fake-messages: true
+
+  # Hide from tab list
+  hide-from-tab: true
+
+  # Prevent interaction
+  prevent-mob-targeting: true
+  prevent-item-pickup: true
+
+  # Action bar indicator
+  action-bar-enabled: true
+  action-bar-message: "&7You are &bvanished&7!"
+
+  # Priority vanish (hidden from lower staff)
+  priority-levels:
+    enabled: true
+    default-level: 1
+
+# Freeze Settings
+freeze:
+  # Message shown to frozen players
+  freeze-message:
+    - "&c&l&m-------------------------"
+    - "&c&lYOU HAVE BEEN FROZEN"
+    - ""
+    - "&7Please join our Discord:"
+    - "&b{discord-url}"
+    - ""
+    - "&7Logging out will result in"
+    - "&7an automatic ban."
+    - "&c&l&m-------------------------"
+
+  # Discord URL for freeze message
+  discord-url: "discord.gg/yourserver"
+
+  # Auto-ban if player logs out while frozen
+  ban-on-logout: true
+  ban-duration: 0 # 0 = permanent
+  ban-reason: "Logged out while frozen"
+
+# Notifications
+notifications:
+  # Notify staff of punishments
+  punishment-notifications: true
+
+  # Notify staff when player with history joins
+  join-notifications: true
+  join-notification-threshold: 3 # Minimum punishments to notify
+
+  # Format for staff notifications
+  format:
+    punishment: "&7[&c&lSTAFF&7] &e{staff} &7punished &e{player} &7for &f{reason}"
+    join: "&7[&c&lSTAFF&7] &e{player} &7joined with &c{count} &7previous punishment(s)"
+
+# Discord Integration (via Webhooks)
+# Create your own Discord bot and generate webhook URLs for the channels you want to use
+# Setup guide: https://discordpy.readthedocs.io/en/stable/webhooks/
+discord:
+  enabled: false # Set to true once DiscordRelay is configured
+
+  # Channel ID from Discord (requires DiscordRelay plugin)
+  # Enable Developer Mode in Discord > Right-click channel > Copy Channel ID
+  channels:
+    staff-notifications: "000000000000000000"
+
+  # Which events to send to Discord
+  events:
+    punishment: true
+    appeal: true
+    report: true
+    buildban: true
+
+  # Embed colors (hex format) - currently unused (plain text via DiscordRelay)
+  colors:
+    punishment: 0xFF5555 # Red
+    report: 0xFFAA00 # Orange
+    appeal: 0x55AAFF # Blue
+    buildban: 0xFFD700 # Gold
+
+# Staff Dashboard
+dashboard:
+  enabled: true
+
+  # Cache dashboard data (minutes) - reduces database queries
+  cache-duration: 5
+
+  # Performance metrics to track
+  metrics:
+    punishments-issued: true
+    reports-handled: true
+    average-response-time: true
+    staff-mode-time: true
+    notes-added: true
+
+# Plan (Player Analytics) Integration
+# Integration is now fully implemented using Plan's DataExtension API
+# Data is automatically sent to Plan when it's installed and enabled
+# View punishment statistics on player pages in the Plan web interface
+plan:
+  enabled: true # Enable Plan integration (requires Plan plugin)
+
+  # All data is now automatically provided via DataExtension API
+  # The following statistics are shown on Plan player pages:
+  # - Total Punishments
+  # - Active Punishments
+  # - Warnings, Mutes, Kicks, Bans, Build Bans (counts)
+  # - Build Ban Status (current)
+  # - Last Punishment (most recent reason)
+
+# Audit Logging
+audit:
+  enabled: true
+
+  # Log retention (days, 0 = forever)
+  retention-days: 90
+
+  # Actions to log
+  log-actions:
+    - PUNISHMENT_ISSUED
+    - PUNISHMENT_REMOVED
+    - PUNISHMENT_EDITED
+    - STAFF_MODE_ENABLE
+    - STAFF_MODE_DISABLE
+    - VANISH_ENABLE
+    - VANISH_DISABLE
+    - FREEZE
+    - UNFREEZE
+    - INVENTORY_VIEW
+    - NOTE_ADD
+    - NOTE_REMOVE
+
+# Discord Settings
+# This is separate from the Discord webhook integration below
+# Use this to customize the Discord link shown in ban/buildban screens
+discord-settings:
+  server-name: "Falcon SMP" # Shown in punishment screens
+  server-branding: "&6&lFalcon SMP &8| &6&lBG&7SU" # Branding line in screens
+  invite-link: "https://discord.gg/t7WAJaEDYe" # Discord invite for ban/buildban screens
+
+# Messages
+messages:
+  prefix: "&6&lFalcon SMP &8| &6&lBG&7SU &8» &6"
+  no-permission: "&6&lBG&7SU &8» &cYou don't have permission to do that!"
+  player-not-found: "&6&lBG&7SU &8» &cPlayer not found!"
+  player-not-online: "&6&lBG&7SU &8» &cPlayer is not online!"
+  must-be-player: "&6&lBG&7SU &8» &cYou must be a player to use this command!"
+
+  # Punishment messages
+  punishment:
+    warned: "&eYou have been warned for: &f{reason}"
+    muted: "&cYou have been muted for {duration} for: &f{reason}"
+    kicked: "&cYou have been kicked for: &f{reason}"
+    ban-kick-reason: "&cYou are banned. See Discord for details."
+    banned: "&cYou have been banned for {duration} for: &f{reason}"
+
+    # Ban screen (shown when banned player tries to join)
+    ban-screen:
+      - "&6&l&m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      - ""
+      - "&c&lYOU HAVE BEEN BANNED!"
+      - ""
+      - "&e&lReason: &f{reason}"
+      - "&e&lRemaining Time: &f{duration-remaining}"
+      - ""
+      - "&7If you believe this is an error, please contact the server staff."
+      - ""
+      - "&6&l&m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      - ""
+      - "&6&lFalcon SMP &8| &6&lBG&7SU"
+      - "&7Visit: &bhttps://discord.gg/t7WAJaEDYe"
+      - "&7Appeal: Use &b/appeal <punishment-id> <reason> &7in-game or visit Discord"
+      - ""
+      - "&8Ban ID: #{id} &8• &8Banned: {date}"
+      - "&8Expires: {expires}"
+      - ""
+      - "&6&l&m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+    # BuildBan screen
+    buildban-screen:
+      - "&6&l&m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      - ""
+      - "&6&lYOU ARE BUILD-BANNED!"
+      - ""
+      - "&e&lReason: &f{reason}"
+      - "&e&lExpires: &f{expires}"
+      - ""
+      - "&a&lYou CAN:"
+      - "&7• Explore the server"
+      - "&7• Chat with players"
+      - "&7• Use /spawn and /tp"
+      - ""
+      - "&c&lYou CANNOT:"
+      - "&7• Break or place blocks"
+      - "&7• Use WorldEdit"
+      - ""
+      - "&6&l&m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      - ""
+      - "&6&lFalcon SMP &8| &6&lBG&7SU"
+      - "&7Appeal: &bhttps://discord.gg/t7WAJaEDYe"
+      - ""
+      - "&8BuildBan ID: #{id}"
+      - ""
+      - "&6&l&m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+    unmuted: "&aYou have been unmuted!"
+    unbanned: "&aYou have been unbanned!"
+
+    staff-warned: "&aYou warned {player} for: {reason}"
+    staff-muted: "&aYou muted {player} for {duration} for: {reason}"
+    staff-kicked: "&aYou kicked {player} for: {reason}"
+    staff-banned: "&aYou banned {player} for {duration} for: {reason}"
+    staff-buildbanned: "&aYou BuildBanned {player} for {duration} for: {reason}"
+
+    already-punished: "&cPlayer is already punished with this type!"
+    not-punished: "&cPlayer is not currently punished!"
+
+  # Staff mode messages
+  staff-mode:
+    enabled: "&aStaff mode enabled!"
+    disabled: "&cStaff mode disabled!"
+
+  # Vanish messages
+  vanish:
+    enabled: "&aYou are now vanished!"
+    disabled: "&cYou are no longer vanished!"
+
+  # Freeze messages
+  freeze:
+    frozen: "&aYou froze {player}!"
+    unfrozen: "&aYou unfroze {player}!"
+    already-frozen: "&c{player} is already frozen!"
+    not-frozen: "&c{player} is not frozen!"
+
+  # Notes messages
+  notes:
+    added: "&aNote added for {player}!"
+    removed: "&aNote removed!"
+    list-header: "&e&lNotes for {player}:"
+    list-format: "&7{id}. &f{note} &7- &e{staff} &7on &e{date}"
+    no-notes: "&cNo notes found for {player}!"
